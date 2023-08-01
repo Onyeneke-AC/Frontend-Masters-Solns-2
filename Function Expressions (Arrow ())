@@ -1,0 +1,43 @@
+let getStudentId = studentId => studentRecords.find( records => records.id == studentId );
+
+let printRecords = recordIds => 
+	recordIds.map(getStudentId)
+    .sort( 
+        (record1, record2) => record1.name < record2.name ? -1 : record1.name > record2.name ? 1 : 0
+    )
+    .forEach(
+        record => console.log(`${record.name} (${record.id}): ${record.paid ? "paid" : "not paid"}`)
+    ); 
+
+
+let paidStudentsToEnroll = () =>  
+    [...currentEnrollment, ... 
+        (studentRecords.filter(records => records.paid && !currentEnrollment.includes(records.id)) 
+            .map(record => record.id ))];
+
+
+let remindUnpaid = recordIds => printRecords( recordIds.filter( studentId => !getStudentId(studentId).paid ));
+
+
+// ********************************
+
+var currentEnrollment = [ 410, 105, 664, 375 ];
+
+var studentRecords = [
+	{ id: 313, name: "Frank", paid: true, },
+	{ id: 410, name: "Suzy", paid: true, },
+	{ id: 709, name: "Brian", paid: false, },
+	{ id: 105, name: "Henry", paid: false, },
+	{ id: 502, name: "Mary", paid: true, },
+	{ id: 664, name: "Bob", paid: false, },
+	{ id: 250, name: "Peter", paid: true, },
+	{ id: 375, name: "Sarah", paid: true, },
+	{ id: 867, name: "Greg", paid: false, },
+];
+
+printRecords(currentEnrollment);
+console.log("----");
+currentEnrollment = paidStudentsToEnroll();
+printRecords(currentEnrollment);
+console.log("----");
+remindUnpaid(currentEnrollment);
